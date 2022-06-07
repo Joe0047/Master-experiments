@@ -5,10 +5,10 @@ import random
 mod = Model("IP_DC")
 
 K = 10
-N = 10
+N = 5
 I = N
 J = N
-M = 20
+M = 10
 
 loadI = np.zeros((M,I))
 loadO = np.zeros((M,J))

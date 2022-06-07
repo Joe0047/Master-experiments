@@ -4,11 +4,11 @@ import random
 
 mod = Model("IP_DC")
 
-K = 5
-N = 5
+K = 10
+N = 50
 I = N
 J = N
-M = 10
+M = 30
 
 flowlist = []
 
@@ -16,12 +16,16 @@ d = np.zeros((K,I,J))
 for k in range(K):
     for i in range(I):
         for j in range(J):
-            d[k,i,j] = random.randint(0, 1000)
+            d[k,i,j] = random.randint(0, 50)
             flowlist.append((d[k,i,j], i, j))
 
 '''IP'''
+'''
 x = mod.addVars(K, I, J, M, vtype = GRB.BINARY)
 T = mod.addVar(vtype = GRB.INTEGER)
+'''
+x = mod.addVars(K, I, J, M, lb = 0.0, ub = 1.0, vtype = GRB.CONTINUOUS)
+T = mod.addVar(vtype = GRB.CONTINUOUS)
 
 mod.update()
 

@@ -10,10 +10,7 @@ I = N
 J = N
 M = 10
 
-loadI = np.zeros((M,I))
-loadO = np.zeros((M,J))
 flowlist = []
-A = [[] for m in range(M)]
 
 d = np.zeros((K,I,J))
 for k in range(K):
@@ -46,6 +43,10 @@ mod.addConstrs(quicksum(d[k,i,j]*x[k,i,j,m] for i in range(I) for k in range(K))
 mod.optimize()
 
 '''FLS'''
+loadI = np.zeros((M,I))
+loadO = np.zeros((M,J))
+A = [[] for m in range(M)]
+
 for f in flowlist:
     m_star = -1
     minload = float("inf")
@@ -70,6 +71,9 @@ for m in range(M):
 print('OPT: %f' % mod.objVal)
 print('FLS: %f' % makespan)
 print(makespan / mod.objVal)
+
+
+
             
 
 

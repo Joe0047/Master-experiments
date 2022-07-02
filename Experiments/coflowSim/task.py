@@ -1,4 +1,5 @@
 from enum import Enum
+from flow import *
 import math
 
 class TaskType(Enum):
@@ -26,7 +27,7 @@ class Task:
         return self.assignedMachine.machineID
         
     def toString(self):
-        return self.taskType + "-" + self.taskName
+        return str(self.taskType) + "-" + str(self.taskName)
     
 class MapTask(Task):
     def __init__(self, taskName, taskID, parentJob, startTime, assignedMachine):
@@ -36,7 +37,11 @@ class ReduceTask(Task):
     def __init__(self, taskName, taskID, parentJob, startTime, assignedMachine, shuffleBytes):
         super().__init__(TaskType.REDUCER, taskName, taskID, parentJob, startTime, assignedMachine)
         self.shuffleBytes = shuffleBytes
-        self.shuffleBytesLeft = shuffleBytes;
+        self.shuffleBytesLeft = shuffleBytes
+        self.flows = None
+        
+        # Rounding to the nearest 1MB
+        self.roundToNearestNMB(1)
     
     def roundToNearestNMB(self, MB):
         tmp = self.shuffleBytes
@@ -48,8 +53,21 @@ class ReduceTask(Task):
             
         self.shuffleBytes = MULT * numMB
         self.shuffleBytesLeft = self.shuffleBytes
+    
+    def createFlows(self):
+        self.flows = []
         
+        avgFlowSize = self.shuffleBytes / self.parentJob.numMappers
+        for t in self.parentJob.tasks:
+            if t.taskType != TaskType.MAPPER:
+                continue
+            
+            flowSize = max(avgFlowSize, 1048576)
+            self.flows.append(Flow(t, self, flowSize))
         
+    
+    
+    
         
         
         

@@ -1,4 +1,5 @@
 from task import *
+from machine import *
 
 class Job:
     def __init__(self, jobName, jobID):
@@ -63,8 +64,8 @@ class Job:
                 self.addAscending(self.tasksInRacks[toRack], t)
                 self.shuffleBytesPerRack[toRack] += t.shuffleBytes
         
-        #self.coalesceMappers(numRacks)
-        #self.coalesceReducers(numRacks)
+        self.coalesceMappers(numRacks)
+        self.coalesceReducers(numRacks)
     
     def coalesceMappers(self, numRacks):
         newMappers = []
@@ -72,10 +73,78 @@ class Job:
             if t.taskType == TaskType.MAPPER:
                 newMappers.append(t)
         
+        for t in newMappers:
+            self.tasks.remove(t)
+        newMappers.clear()
         
+        # Reset mapper counters in job
+        self.numMappers = 0
         
+        for i in range(numRacks):
+            if self.numMappersInRacks[i] > 0:
+                self.numMappers += 1
+            
+            iThMt = MapTask("JOB-" + str(self.jobID) + "-MAP-" + str(i), i, self, self.actualStartTime, Machine(i+1))
+            
+            newMappers.append(iThMt)
         
+        self.tasks.extend(newMappers)
                 
+    def coalesceReducers(self, numRacks):
+        newReducers = []
+        for t in self.tasks:
+            if t.taskType == TaskType.REDUCER:
+                newReducers.append(t)
+        
+        for t in newReducers:
+            self.tasks.remove(t)
+        newReducers.clear()
+        
+        # Reset shuffle counters in job
+        self.numReducers = 0
+        self.totalShuffleBytes = 0
+   
+        for i in range(numRacks):
+            if self.tasksInRacks[i] != None and len(self.tasksInRacks[i]) > 0:
+                self.numReducers += 1
+            
+                iThRt = ReduceTask("JOB-" + str(self.jobID) + "-REDUCE-" + str(i), i, self, self.actualStartTime, Machine(i+1), 0)
+                
+                # Update shuffle counters in task
+                for t in self.tasksInRacks[i]:
+                    iThRt.shuffleBytes += t.shuffleBytes
+                iThRt.shuffleBytesLeft = iThRt.shuffleBytes
+                
+                
+                # Update shuffle counters in job
+                self.totalShuffleBytes += iThRt.shuffleBytes;
+                
+                newReducers.append(iThRt)
+                
+                self.tasksInRacks[i].clear()
+                self.tasksInRacks[i].append(iThRt)
+        
+        self.tasks.extend(newReducers)
+        
+        # Fixes for two-sided simulation
+        if self.numMappers == 0:
+            return
+        
+        self.totalShuffleBytes = 0
+        for t in self.tasks:
+            if t.taskType != TaskType.REDUCER:
+                continue
+            
+            # Rounding to numMappers
+            t.roundToNearestNMB(self.numMappers)
+            
+            self.totalShuffleBytes += t.shuffleBytes
+            
+            # Now create flows
+            t.createFlows()
+        
+        
+        
                 
         
         

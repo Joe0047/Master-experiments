@@ -3,4 +3,4 @@ class Machine:
         self.machineID = machineID
     
     def toString(self):
-        return "Machine-" + self.machineID
+        return "Machine-" + str(self.machineID)

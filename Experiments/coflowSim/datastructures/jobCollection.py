@@ -1,4 +1,4 @@
-from job import *
+from datastructures.job import *
 
 class JobCollection:
     def __init__(self):
@@ -28,3 +28,7 @@ class JobCollection:
     
     def elementAt(self, index):
         return self.listOfJobs[index]
+    
+    def removeJob(self, job):
+        self.listOfJobs.remove(job)
+        del self.hashOfJobs[job.getJobName()]

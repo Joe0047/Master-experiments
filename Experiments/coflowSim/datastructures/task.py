@@ -1,5 +1,5 @@
 from enum import Enum
-from flow import *
+from datastructures.flow import *
 import math
 
 class TaskType(Enum):
@@ -65,7 +65,8 @@ class ReduceTask(Task):
             flowSize = max(avgFlowSize, 1048576)
             self.flows.append(Flow(t, self, flowSize))
         
-    
+    def getNumFlows(self):
+        return len(self.flows)
     
     
         

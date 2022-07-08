@@ -1,5 +1,5 @@
-from task import *
-from machine import *
+from datastructures.task import *
+from datastructures.machine import *
 
 class Job:
     def __init__(self, jobName, jobID):
@@ -15,12 +15,16 @@ class Job:
         self.numMappers = 0
         self.numReducers = 0
         self.totalShuffleBytes = 0
+        self.numFlows = 0
     
     def addTask(self, task):
         self.tasks.append(task)
+        
+        # Determine job arrival times
         if task.actualStartTime < self.actualStartTime:
             self.actualStartTime = task.actualStartTime
         
+        # Increase respective task counts
         if task.taskType == TaskType.MAPPER:
             self.numMappers += 1
         elif task.taskType == TaskType.REDUCER:
@@ -83,10 +87,10 @@ class Job:
         for i in range(numRacks):
             if self.numMappersInRacks[i] > 0:
                 self.numMappers += 1
-            
-            iThMt = MapTask("JOB-" + str(self.jobID) + "-MAP-" + str(i), i, self, self.actualStartTime, Machine(i+1))
-            
-            newMappers.append(iThMt)
+                
+                iThMt = MapTask("JOB-" + str(self.jobID) + "-MAP-" + str(i), i, self, self.actualStartTime, Machine(i+1))
+                
+                newMappers.append(iThMt)
         
         self.tasks.extend(newMappers)
                 
@@ -142,21 +146,14 @@ class Job:
             
             # Now create flows
             t.createFlows()
+            self.numFlows += t.getNumFlows()
+    
+    def getNumFlows(self):
+        return self.numFlows
         
-        
+    def getJobName(self):
+        return self.jobName
         
                 
         
         
-      
-                
-            
-        
-    
-    
-    
-            
-        
-        
-        
-    

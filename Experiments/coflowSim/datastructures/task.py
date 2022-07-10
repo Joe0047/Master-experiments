@@ -23,6 +23,9 @@ class Task:
     def cleanupTask(self, curtime):
         self.simulatedFinishTime = curtime
     
+    def getArrivalTime(self):
+        return self.actualStartTime
+    
     def getPlacement(self):
         return self.assignedMachine.machineID
         
@@ -69,13 +72,3 @@ class ReduceTask(Task):
         return len(self.flows)
     
     
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        

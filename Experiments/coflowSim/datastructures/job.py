@@ -109,7 +109,7 @@ class Job:
         self.totalShuffleBytes = 0
    
         for i in range(numRacks):
-            if self.tasksInRacks[i] != None and len(self.tasksInRacks[i]) > 0:
+            if self.tasksInRacks[i] != None and len(self.tasksInRacks[i]) > 0:    
                 self.numReducers += 1
             
                 iThRt = ReduceTask("JOB-" + str(self.jobID) + "-REDUCE-" + str(i), i, self, self.actualStartTime, Machine(i+1), 0)
@@ -154,6 +154,5 @@ class Job:
     def getJobName(self):
         return self.jobName
         
-                
-        
+    
         

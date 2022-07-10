@@ -40,6 +40,7 @@ class CustomTraceProducer(TraceProducer):
         super().__init__()
         self.NUM_RACKS = numRacks
         self.MACHINES_PER_RACK = 1
+        self.MAPPER_ARRIVAL_TIME = 0
         self.REDUCER_ARRIVAL_TIME = 0
         self.numJobs = numJobs
         self.numJobClasses = len(jobClassDescs)
@@ -79,7 +80,7 @@ class CustomTraceProducer(TraceProducer):
                     taskID = mID
                     
                     # Create map task
-                    task = MapTask(taskName, taskID, job, Constants.VALUE_IGNORED, Machine(self.selectMachine(rackChosen)))
+                    task = MapTask(taskName, taskID, job, self.MAPPER_ARRIVAL_TIME, Machine(self.selectMachine(rackChosen)))
                 
                     # Add task to corresponding job
                     job.addTask(task)

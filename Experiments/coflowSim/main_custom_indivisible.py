@@ -41,7 +41,7 @@ for k in range(K):
             i = f.getMapper().getPlacement() - 1
             j = f.getReducer().getPlacement() - 1
             
-            d[k,i,j] = f.getFlowSize()
+            d[k,i,j] = f.getFlowSize() / 1048576.0 * 8
 
 li = np.zeros((K,I))
 lj = np.zeros((K,J))

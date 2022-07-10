@@ -2,6 +2,7 @@ from gurobipy import *
 from traceProducer.traceProducer import *
 from datastructures.jobCollection import *
 from simulator.simulator import *
+from utils.constants import *
 import numpy as np
 
 pathToCoflowBenchmarkTraceFile = "./coflow-benchmark-master/FB2010-1Hr-150-0.txt"
@@ -10,7 +11,7 @@ tr.prepareTrace()
 
 sim = Simulator(tr)
 
-thresNumFlows = 40
+thresNumFlows = 50
 tr.filterJobsByNumFlows(thresNumFlows)
 print(tr.getNumJobs())
 
@@ -33,9 +34,9 @@ for k in range(K):
             i = f.getMapper().getPlacement() - 1
             j = f.getReducer().getPlacement() - 1
             
-            d[k,i,j] = f.getFlowSize()
+            d[k,i,j] = f.getFlowSize() / 1048576.0 * 8
             flowlist.append((d[k,i,j], i, j, f))
-            
+         
 # LP_DC
 mod = Model("LP_DC")
 
@@ -44,7 +45,6 @@ T = mod.addVar(vtype = GRB.CONTINUOUS)
 
 #x = mod.addVars(K, I, J, M, vtype = GRB.BINARY)
 #T = mod.addVar(vtype = GRB.INTEGER)
-
 
 mod.update()
 
@@ -85,6 +85,11 @@ for f in flowlist:
     loadO[h_star][f[2]] += f[0]
 
 
+EPOCH_IN_MILLIS = Constants.SIMULATION_QUANTA
+for h in range(M):
+    sim.simulate(A[h], EPOCH_IN_MILLIS)
+'''
+'''
 # FLPT
 loadI = np.zeros((M,I))
 loadO = np.zeros((M,J))

@@ -43,7 +43,7 @@ for k in range(K):
             i = f.getMapper().getPlacement() - 1
             j = f.getReducer().getPlacement() - 1
             
-            d[k,i,j] = f.getFlowSize()
+            d[k,i,j] = f.getFlowSize() / 1048576.0 * 8
             flowlist.append((d[k,i,j], i, j, f))
             
 # LP_DC

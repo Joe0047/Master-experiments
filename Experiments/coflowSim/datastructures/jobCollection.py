@@ -15,13 +15,6 @@ class JobCollection:
             self.listOfJobs.append(job)
             
             return job
-    
-    def sortByStartTime(self):
-        
-        def forActualStartTime(job):
-            return job.actualStartTime
-        
-        self.listOfJobs.sort(key = forActualStartTime)
         
     def size(self):
         return len(self.listOfJobs)

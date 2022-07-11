@@ -56,6 +56,16 @@ class Simulator:
                 readyFlows.append(flow)
                 flowsInThisCore.remove(flow)
             
+            for flow in readyFlows:
+                # Convert machine to rack. (Subtracting because machine IDs start from 1)
+                i = flow.getMapper().getPlacement() - 1
+                j = flow.getReducer().getPlacement() - 1
+                
+                # If link (i,j) is idle, assign flow to it
+                if rackMapperInfoTable[i] == False and rackReducerInfoTable[j] == False:
+                    activeFlows.append(flow)
+                    readyFlows.remove(flow)
+                    
             
                 
         

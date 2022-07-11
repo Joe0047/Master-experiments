@@ -1,3 +1,5 @@
+from utils.constants import *
+
 class Simulator:
     def __init__(self, traceProducer):
         self.NUM_RACKS = traceProducer.getNumRacks()
@@ -36,35 +38,62 @@ class Simulator:
         
         rackMapperInfoTable = []
         rackReducerInfoTable = []
+        bytesInRackReducer = []
         for i in range(self.NUM_RACKS):
             rackMapperInfoTable.append(False)
             rackReducerInfoTable.append(False)
+            bytesInRackReducer.append(0)
         
         while(len(flowsInThisCore) > 0 or len(activeFlows) > 0):
-            newReadyFlows = []
             
+            newReadyFlows = []
             for flow in flowsInThisCore:
                 flowArrivalTime = min(flow.getMapper().getArrivalTime(), flow.getReducer().getArrivalTime())
                 
+                # If flow is not arrived, do not add flow to ready flows
                 if flowArrivalTime > CURRENT_TIME + EPOCH_IN_MILLIS:
                     continue
                 
-                # One flow added
+                # One flow added to ready flows
                 newReadyFlows.append(flow)
                 
             for flow in newReadyFlows:
                 readyFlows.append(flow)
                 flowsInThisCore.remove(flow)
             
+            newActiveFlows = []
             for flow in readyFlows:
                 # Convert machine to rack. (Subtracting because machine IDs start from 1)
                 i = flow.getMapper().getPlacement() - 1
                 j = flow.getReducer().getPlacement() - 1
                 
-                # If link (i,j) is idle, assign flow to it
-                if rackMapperInfoTable[i] == False and rackReducerInfoTable[j] == False:
-                    activeFlows.append(flow)
-                    readyFlows.remove(flow)
+                # If link (i,j) is not idle, do not assign flow to active flows
+                if rackMapperInfoTable[i] == True or rackReducerInfoTable[j] == True:
+                    continue
+                
+                # Update the mapper and reducer rack table
+                rackMapperInfoTable[i] = True
+                rackReducerInfoTable[j] = True
+                
+                # One flow added to active flows
+                newActiveFlows.append(flow)
+            
+            for flow in newActiveFlows:
+                activeFlows.append(flow)
+                readyFlows.remove(flow)
+            
+            finishedFlows = []
+            for flow in activeFlows:
+                flow.bytesRemaining -= EPOCH_IN_MILLIS * Constants.RACK_BYTES_PER_MILLISEC
+                
+                # Finished flow
+                if flow.bytesRemaining <= 0:
+                    finishedFlows.append(flow)
+            
+            for flow in finishedFlows:
+                activeFlows.remove(flow)
+                
+                
                     
             
                 

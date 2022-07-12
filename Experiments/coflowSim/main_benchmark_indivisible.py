@@ -20,36 +20,7 @@ I = N
 J = N
 M = 5
 
-d = np.zeros((K,I,J))
-for k in range(K):
-    for t in tr.jobs.elementAt(k).tasks:
-        if t.taskType != TaskType.REDUCER:
-            continue
-        
-        for f in t.flows:
-            # Convert machine to rack. (Subtracting because machine IDs start from 1)
-            i = f.getMapper().getPlacement() - 1
-            j = f.getReducer().getPlacement() - 1
-            
-            d[k,i,j] = f.getFlowSize() / 1048576.0 * Constants.SIMULATION_QUANTA
-
-li = np.zeros((K,I))
-lj = np.zeros((K,J))
-coflowlist = []
-for k in range(K):
-    coflowI = []
-    for i in range(I):
-        for j in range(J):
-            li[k,i] += d[k,i,j]
-        coflowI.append(li[k,i])
-    
-    coflowO = []
-    for j in range(J):
-        for i in range(I):
-            lj[k,j] += d[k,i,j]
-        coflowO.append(lj[k,j])
-    
-    coflowlist.append((coflowI, coflowO, tr.jobs.elementAt(k)))
+li, lj, coflowlist = tr.produceCoflowSizeAndList()
 
 # LP_IDC
 mod = Model("LP_IDC")
@@ -76,7 +47,8 @@ mod.addConstrs(quicksum(lj[k,j]*x[k,h] for k in range(K)) <= T
 
 mod.optimize()
 
-'''
+EPOCH_IN_MILLIS = Constants.SIMULATION_QUANTA
+
 # CLS
 loadI = np.zeros((M,I))
 loadO = np.zeros((M,J))
@@ -95,12 +67,30 @@ for k in coflowlist:
             h_star = h
             minload = maxload
             
-    A[h_star].append(k[2])
+    for t in k[2].tasks:
+        if t.taskType != TaskType.REDUCER:
+            continue
+        
+        for f in t.flows:
+            A[h_star].append(f)
+            
     for i in range(I):
         loadI[h_star][i] += k[0][i]
     for j in range(J):
         loadO[h_star][j] += k[1][j]
-'''
+
+makespan_CLS = float("-inf")
+
+for h in range(M):
+    finishedTimeOfCore = sim.simulate(A[h], EPOCH_IN_MILLIS)
+    if finishedTimeOfCore > makespan_CLS:
+        makespan_CLS = finishedTimeOfCore
+        
+print("========================================================")
+print('OPT: %f' % mod.objVal)
+print('CLS: %f' % makespan_CLS)
+print(makespan_CLS / mod.objVal)
+print("========================================================")
     
 
 

@@ -28,7 +28,7 @@ K = tr.getNumJobs()
 N = tr.getNumRacks()
 I = N
 J = N
-M = 5
+M = 10
 
 d, flowlist = tr.produceFlowSizeAndList()
             
@@ -206,17 +206,4 @@ print('Weaver: %f' % makespan_Weaver)
 print(makespan_Weaver / mod.objVal)
 print("========================================================")
 
-'''
-# Test whether if some flows are not finished 
-for k in range(K):
-    for t in tr.jobs.elementAt(k).tasks:
-        if t.taskType != TaskType.REDUCER:
-            continue
-        
-        for f in t.flows:
-            if f.bytesRemaining > 0:
-                print("some flows are not finished!!!")
-'''
     
-
-

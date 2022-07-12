@@ -44,6 +44,40 @@ class TraceProducer:
         
         return d, flowlist
     
+    def produceCoflowSizeAndList(self):
+        d = np.zeros((self.numJobs, self.NUM_RACKS, self.NUM_RACKS))
+        for k in range(self.numJobs):
+            for t in self.jobs.elementAt(k).tasks:
+                if t.taskType != TaskType.REDUCER:
+                    continue
+                
+                for f in t.flows:
+                    # Convert machine to rack. (Subtracting because machine IDs start from 1)
+                    i = f.getMapper().getPlacement() - 1
+                    j = f.getReducer().getPlacement() - 1
+                    
+                    d[k,i,j] = f.getFlowSize() / 1048576.0 * Constants.SIMULATION_QUANTA
+
+        li = np.zeros((self.numJobs, self.NUM_RACKS))
+        lj = np.zeros((self.numJobs, self.NUM_RACKS))
+        coflowlist = []
+        for k in range(self.numJobs):
+            coflowI = []
+            for i in range(self.NUM_RACKS):
+                for j in range(self.NUM_RACKS):
+                    li[k,i] += d[k,i,j]
+                coflowI.append(li[k,i])
+            
+            coflowO = []
+            for j in range(self.NUM_RACKS):
+                for i in range(self.NUM_RACKS):
+                    lj[k,j] += d[k,i,j]
+                coflowO.append(lj[k,j])
+            
+            coflowlist.append((coflowI, coflowO, self.jobs.elementAt(k)))
+    
+        return li, lj, coflowlist
+    
     def initFlowRemainingBytes(self):
         for k in range(self.numJobs):
             for t in self.jobs.elementAt(k).tasks:

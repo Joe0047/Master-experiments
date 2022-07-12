@@ -5,7 +5,6 @@ class Simulator:
         self.NUM_RACKS = traceProducer.getNumRacks()
         self.MACHINES_PER_RACK = traceProducer.getMachinesPerRack()
         self.jobs = None
-        self.traceProducer = traceProducer
         
         self.initialize(traceProducer)
     
@@ -26,9 +25,6 @@ class Simulator:
     Event loop of the simulator that proceed epoch by epoch.
      * Simulate the time steps in each epoch, where each time step (8ms) is as long as it takes to
        transfer 1MB through each link.
-     * In each time step take appropriate scheduling decision using {@link #onSchedule(long)}.
-     * If any job/coflow has completed, update relavant data structures using
-       {@link #afterJobDeparture(long)}.
      * Repeat.
     '''
     def simulate(self, flowsInThisCore, EPOCH_IN_MILLIS):
@@ -38,13 +34,13 @@ class Simulator:
         
         rackMapperInfoTable = []
         rackReducerInfoTable = []
-        bytesInRackReducer = []
+        finishedTimeOfRackReducer = []
         for i in range(self.NUM_RACKS):
             rackMapperInfoTable.append(False)
             rackReducerInfoTable.append(False)
-            bytesInRackReducer.append(0)
+            finishedTimeOfRackReducer.append(0)
         
-        while(len(flowsInThisCore) > 0 or len(activeFlows) > 0):
+        while(len(flowsInThisCore) > 0 or len(readyFlows) > 0 or len(activeFlows) > 0):
             
             newReadyFlows = []
             for flow in flowsInThisCore:
@@ -84,19 +80,34 @@ class Simulator:
             
             finishedFlows = []
             for flow in activeFlows:
+                # Convert machine to rack. (Subtracting because machine IDs start from 1)
+                i = flow.getMapper().getPlacement() - 1
+                j = flow.getReducer().getPlacement() - 1
+                
                 flow.bytesRemaining -= EPOCH_IN_MILLIS * Constants.RACK_BYTES_PER_MILLISEC
                 
                 # Finished flow
                 if flow.bytesRemaining <= 0:
                     finishedFlows.append(flow)
+                    
+                    # Update the mapper and reducer rack table
+                    rackMapperInfoTable[i] = False
+                    rackReducerInfoTable[j] = False
+                    
+                    # Update the finished time of rack reducer
+                    finishedTimeOfRackReducer[j] = CURRENT_TIME + EPOCH_IN_MILLIS
             
             for flow in finishedFlows:
                 activeFlows.remove(flow)
                 
+            CURRENT_TIME += EPOCH_IN_MILLIS
                 
-                    
+        maxFinishedTime = float("-inf")
+        for i in range(self.NUM_RACKS):
+            if finishedTimeOfRackReducer[i] > maxFinishedTime:
+                maxFinishedTime = finishedTimeOfRackReducer[i]
             
-                
+        return maxFinishedTime
         
         
         

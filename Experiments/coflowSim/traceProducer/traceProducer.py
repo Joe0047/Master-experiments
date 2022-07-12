@@ -1,23 +1,58 @@
 from datastructures.task import *
 from datastructures.machine import *
 from datastructures.jobCollection import *
+from datastructures.flow import *
 from utils.constants import *
 from utils.utils import *
+import numpy as np
 import random
 
 class TraceProducer:
-    def __init__(self):
+    def __init__(self, numRacks, numJobs):
         self.jobs = JobCollection()
+        self.NUM_RACKS = numRacks
+        self.numJobs = numJobs
+        self.MACHINES_PER_RACK = 1
     
     def prepareTrace(self):
         return
     
     def getNumRacks(self):
-        return
+        return self.NUM_RACKS
+    
+    def getNumJobs(self):
+        return self.numJobs
     
     def getMachinesPerRack(self):
-        return
-
+        return self.MACHINES_PER_RACK
+    
+    def produceFlowSizeAndList(self):
+        d = np.zeros((self.numJobs, self.NUM_RACKS, self.NUM_RACKS))
+        flowlist = []
+        for k in range(self.numJobs):
+            for t in self.jobs.elementAt(k).tasks:
+                if t.taskType != TaskType.REDUCER:
+                    continue
+                
+                for f in t.flows:
+                    # Convert machine to rack. (Subtracting because machine IDs start from 1)
+                    i = f.getMapper().getPlacement() - 1
+                    j = f.getReducer().getPlacement() - 1
+                    
+                    d[k,i,j] = f.getFlowSize() / 1048576.0 * Constants.SIMULATION_QUANTA
+                    flowlist.append((d[k,i,j], i, j, f))
+        
+        return d, flowlist
+    
+    def initFlowRemainingBytes(self):
+        for k in range(self.numJobs):
+            for t in self.jobs.elementAt(k).tasks:
+                if t.taskType != TaskType.REDUCER:
+                    continue
+                
+                for f in t.flows:
+                    f.initFlow()
+    
 '''
 Creates a random trace based on the given parameters.
 
@@ -37,12 +72,9 @@ Characteristics of the generated trace:
 
 class CustomTraceProducer(TraceProducer):
     def __init__(self, numRacks, numJobs, jobClassDescs, fracsOfClasses, randomSeed):
-        super().__init__()
-        self.NUM_RACKS = numRacks
-        self.MACHINES_PER_RACK = 1
+        super().__init__(numRacks, numJobs)
         self.MAPPER_ARRIVAL_TIME = 0
         self.REDUCER_ARRIVAL_TIME = 0
-        self.numJobs = numJobs
         self.numJobClasses = len(jobClassDescs)
         self.jobClass = jobClassDescs
         self.fracsOfClasses = fracsOfClasses
@@ -124,15 +156,6 @@ class CustomTraceProducer(TraceProducer):
         racksAlreadyChosen[rackIndex] = True
         # 1 <= rackIndex <= NUM_RACKS
         return rackIndex + 1
-    
-    def getNumRacks(self):
-        return self.NUM_RACKS
-    
-    def getNumJobs(self):
-        return self.numJobs
-    
-    def getMachinesPerRack(self):
-        return self.MACHINES_PER_RACK
         
 '''
 Reads a trace from the <a href="https://github.com/coflow/coflow-benchmark">coflow-benchmark</a>
@@ -159,10 +182,7 @@ Characteristics of the generated trace:
 
 class CoflowBenchmarkTraceProducer(TraceProducer):
     def __init__(self, pathToCoflowBenchmarkTraceFile):
-        super().__init__()
-        self.NUM_RACKS = None
-        self.MACHINES_PER_RACK = 1
-        self.numJobs = None
+        super().__init__(None, None)
         self.pathToCoflowBenchmarkTraceFile = pathToCoflowBenchmarkTraceFile
         
     def prepareTrace(self):
@@ -184,7 +204,8 @@ class CoflowBenchmarkTraceProducer(TraceProducer):
                 lIndex += 1
                 job = self.jobs.getOrAddJob(jobName)
                 
-                jobArrivalTime = int(splits[lIndex])
+                #jobArrivalTime = int(splits[lIndex])
+                jobArrivalTime = 0
                 lIndex += 1
                 
                 # Create mappers
@@ -244,12 +265,3 @@ class CoflowBenchmarkTraceProducer(TraceProducer):
             self.jobs.removeJob(j)
         
         self.numJobs = self.jobs.size()
-
-    def getNumRacks(self):
-        return self.NUM_RACKS
-    
-    def getNumJobs(self):
-        return self.numJobs
-    
-    def getMachinesPerRack(self):
-        return self.MACHINES_PER_RACK

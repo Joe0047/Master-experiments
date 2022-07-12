@@ -28,23 +28,9 @@ K = tr.getNumJobs()
 N = tr.getNumRacks()
 I = N
 J = N
-M = 10
+M = 5
 
-d = np.zeros((K,I,J))
-flowlist = []
-
-for k in range(K):
-    for t in tr.jobs.elementAt(k).tasks:
-        if t.taskType != TaskType.REDUCER:
-            continue
-        
-        for f in t.flows:
-            # Convert machine to rack. (Subtracting because machine IDs start from 1)
-            i = f.getMapper().getPlacement() - 1
-            j = f.getReducer().getPlacement() - 1
-            
-            d[k,i,j] = f.getFlowSize() / 1048576.0 * Constants.SIMULATION_QUANTA
-            flowlist.append((d[k,i,j], i, j, f))
+d, flowlist = tr.produceFlowSizeAndList()
             
 # LP_DC
 mod = Model("LP_DC")
@@ -75,7 +61,8 @@ mod.addConstrs(quicksum(d[k,i,j]*x[k,i,j,h] for i in range(I) for k in range(K))
 
 mod.optimize()
 
-'''
+EPOCH_IN_MILLIS = Constants.SIMULATION_QUANTA
+
 # FLS
 loadI = np.zeros((M,I))
 loadO = np.zeros((M,J))
@@ -93,6 +80,23 @@ for f in flowlist:
     A[h_star].append(f[3])
     loadI[h_star][f[1]] += f[0]
     loadO[h_star][f[2]] += f[0]
+
+makespan_FLS = float("-inf")
+
+for h in range(M):
+    finishedTimeOfCore = sim.simulate(A[h], EPOCH_IN_MILLIS)
+    if finishedTimeOfCore > makespan_FLS:
+        makespan_FLS = finishedTimeOfCore
+        
+print("========================================================")
+print('OPT: %f' % mod.objVal)
+print('FLS: %f' % makespan_FLS)
+print(makespan_FLS / mod.objVal)
+print("========================================================")
+
+
+# Initialize the remaining bytes of flows
+tr.initFlowRemainingBytes()
 
 
 # FLPT
@@ -113,6 +117,23 @@ for f in flowlist:
     A[h_star].append(f[3])
     loadI[h_star][f[1]] += f[0]
     loadO[h_star][f[2]] += f[0]
+
+makespan_FLPT = float("-inf")
+
+for h in range(M):
+    finishedTimeOfCore = sim.simulate(A[h], EPOCH_IN_MILLIS)
+    if finishedTimeOfCore > makespan_FLPT:
+        makespan_FLPT = finishedTimeOfCore
+
+print("========================================================")
+print('OPT: %f' % mod.objVal)
+print('FLPT: %f' % makespan_FLPT)
+print(makespan_FLPT / mod.objVal)
+print("========================================================")
+
+
+# Initialize the remaining bytes of flows
+tr.initFlowRemainingBytes()
 
 
 # Weaver
@@ -172,13 +193,30 @@ for f in flowlist:
     loadI[h_star][f[1]] += f[0]
     loadO[h_star][f[2]] += f[0]
 
+makespan_Weaver = float("-inf")
 
+for h in range(M):
+    finishedTimeOfCore = sim.simulate(A[h], EPOCH_IN_MILLIS)
+    if finishedTimeOfCore > makespan_Weaver:
+        makespan_Weaver = finishedTimeOfCore
+        
+print("========================================================")
+print('OPT: %f' % mod.objVal)
+print('Weaver: %f' % makespan_Weaver)
+print(makespan_Weaver / mod.objVal)
+print("========================================================")
 
-#print('OPT: %f' % mod.objVal)
-#print('FLS: %f' % makespan)
-#print(makespan / mod.objVal)
 '''
-    
+# Test whether if some flows are not finished 
+for k in range(K):
+    for t in tr.jobs.elementAt(k).tasks:
+        if t.taskType != TaskType.REDUCER:
+            continue
+        
+        for f in t.flows:
+            if f.bytesRemaining > 0:
+                print("some flows are not finished!!!")
+'''
     
 
 

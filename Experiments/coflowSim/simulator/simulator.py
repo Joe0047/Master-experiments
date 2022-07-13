@@ -25,7 +25,6 @@ class Simulator:
     Event loop of the simulator that proceed epoch by epoch.
      * Simulate the time steps in each epoch, where each time step (8ms) is as long as it takes to
        transfer 1MB through each link.
-     * Repeat.
     '''
     def simulate(self, flowsInThisCore, EPOCH_IN_MILLIS):
         CURRENT_TIME = 0

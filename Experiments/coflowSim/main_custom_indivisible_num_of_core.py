@@ -10,7 +10,7 @@ numOfCores = []
 CLS = []
 
 curNumCores = 5
-lastNumCores = 25
+lastNumCores = 50
 stepSize = 5
 
 while(curNumCores <= lastNumCores):
@@ -152,7 +152,7 @@ plt.yticks(fontsize=20)
 
 # 標示x軸(labelpad代表與圖片的距離)
 
-plt.xlabel("Number of coflows", fontsize=30, labelpad = 15)
+plt.xlabel("Number of cores", fontsize=30, labelpad = 15)
 
 # 標示y軸(labelpad代表與圖片的距離)
 

@@ -6,24 +6,25 @@ from utils.constants import *
 import numpy as np
 import matplotlib.pyplot as plt
 
-numOfCoflows = []
+thresNumOfFlows = []
 FLS = []
 FLPT = []
 Weaver = []
 
-thresNumFlows = 1000
-stepThresSize = 100
+curThresNumFlows = 200
+lastThresNumFlows = 1000
+stepThresSize = 200
 
-while(thresNumFlows >= 100):
+while(curThresNumFlows <= lastThresNumFlows):
     pathToCoflowBenchmarkTraceFile = "./coflow-benchmark-master/FB2010-1Hr-150-0.txt"
     tr = CoflowBenchmarkTraceProducer(pathToCoflowBenchmarkTraceFile)
     tr.prepareTrace()
     
     sim = Simulator(tr)
     
-    print(thresNumFlows)
-    tr.filterJobsByNumFlows(thresNumFlows)
-    numOfCoflows.append(tr.getNumJobs())
+    print(curThresNumFlows)
+    tr.filterJobsByNumFlows(curThresNumFlows)
+    thresNumOfFlows.append(curThresNumFlows)
     
     K = tr.getNumJobs()
     N = tr.getNumRacks()
@@ -210,20 +211,20 @@ while(thresNumFlows >= 100):
     
     Weaver.append(makespan_Weaver / mod.objVal)
     
-    thresNumFlows -= stepThresSize
+    curThresNumFlows += stepThresSize
 
 # 設定圖片大小為長15、寬10
 
 plt.figure(figsize=(15,10),dpi=100,linewidth = 2)
 
 
-plt.plot(numOfCoflows,FLS,'s-',color = 'r', label="FLS")
+plt.plot(thresNumOfFlows,FLS,'s-',color = 'r', label="FLS")
 
 
-plt.plot(numOfCoflows,FLPT,'o-',color = 'g', label="FLPT")
+plt.plot(thresNumOfFlows,FLPT,'o-',color = 'g', label="FLPT")
 
 
-plt.plot(numOfCoflows,Weaver,'^-',color = 'b', label="Weaver")
+plt.plot(thresNumOfFlows,Weaver,'^-',color = 'b', label="Weaver")
 
 
 # 設定圖片標題，以及指定字型設定，x代表與圖案最左側的距離，y代表與圖片的距離
@@ -238,7 +239,7 @@ plt.yticks(fontsize=20)
 
 # 標示x軸(labelpad代表與圖片的距離)
 
-plt.xlabel("Number of coflows", fontsize=30, labelpad = 15)
+plt.xlabel("Threshold of the number of flows", fontsize=30, labelpad = 15)
 
 # 標示y軸(labelpad代表與圖片的距離)
 

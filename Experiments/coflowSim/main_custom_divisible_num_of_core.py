@@ -6,18 +6,18 @@ from simulator.simulator import *
 import numpy as np
 import matplotlib.pyplot as plt
 
-numOfCoflows = []
+numOfCores = []
 FLS = []
 FLPT = []
 Weaver = []
 
-curNumCoflows = 30
-lastNumCoflows = 120
-stepSize = 10
+curNumCores = 5
+lastNumCores = 25
+stepSize = 5
 
-while(curNumCoflows <= lastNumCoflows):
-    print(curNumCoflows)
-    numOfCoflows.append(curNumCoflows)
+while(curNumCores <= lastNumCores):
+    print(curNumCores)
+    numOfCores.append(curNumCores)
     
     rseed = 13
     turn = 5
@@ -30,7 +30,7 @@ while(curNumCoflows <= lastNumCoflows):
     
     while(turn > 0):
         numRacks = 50
-        numJobs = curNumCoflows
+        numJobs = 100
         randomSeed = rseed
         
         jobClassDescs = [JobClassDescription(1, 5, 1, 10),
@@ -52,7 +52,7 @@ while(curNumCoflows <= lastNumCoflows):
         N = tr.getNumRacks()
         I = N
         J = N
-        M = 10
+        M = curNumCores
         
         d, flowlist = tr.produceFlowSizeAndList()
                     
@@ -252,20 +252,20 @@ while(curNumCoflows <= lastNumCoflows):
     average_Weaver /= len(listOfTurnsWeaver)
     Weaver.append(average_Weaver)
     
-    curNumCoflows += stepSize
+    curNumCores += stepSize
 
 # 設定圖片大小為長15、寬10
 
 plt.figure(figsize=(15,10),dpi=100,linewidth = 2)
 
 
-plt.plot(numOfCoflows,FLS,'s-',color = 'r', label="FLS")
+plt.plot(numOfCores,FLS,'s-',color = 'r', label="FLS")
 
 
-plt.plot(numOfCoflows,FLPT,'o-',color = 'g', label="FLPT")
+plt.plot(numOfCores,FLPT,'o-',color = 'g', label="FLPT")
 
 
-plt.plot(numOfCoflows,Weaver,'^-',color = 'b', label="Weaver")
+plt.plot(numOfCores,Weaver,'^-',color = 'b', label="Weaver")
 
 
 # 設定圖片標題，以及指定字型設定，x代表與圖案最左側的距離，y代表與圖片的距離

@@ -6,16 +6,16 @@ from simulator.simulator import *
 import numpy as np
 import matplotlib.pyplot as plt
 
-numOfCoflows = []
+numOfCores = []
 CLS = []
 
-curNumCoflows = 30
-lastNumCoflows = 120
-stepSize = 10
+curNumCores = 5
+lastNumCores = 25
+stepSize = 5
 
-while(curNumCoflows <= lastNumCoflows):
-    print(curNumCoflows)
-    numOfCoflows.append(curNumCoflows)
+while(curNumCores <= lastNumCores):
+    print(curNumCores)
+    numOfCores.append(curNumCores)
     
     rseed = 13
     turn = 5
@@ -24,7 +24,7 @@ while(curNumCoflows <= lastNumCoflows):
     
     while(turn > 0):
         numRacks = 50
-        numJobs = curNumCoflows
+        numJobs = 100
         randomSeed = rseed
         
         jobClassDescs = [JobClassDescription(1, 5, 1, 10),
@@ -46,7 +46,7 @@ while(curNumCoflows <= lastNumCoflows):
         N = tr.getNumRacks()
         I = N
         J = N
-        M = 10
+        M = curNumCores
         
         li, lj, coflowlist = tr.produceCoflowSizeAndList()
         
@@ -130,14 +130,14 @@ while(curNumCoflows <= lastNumCoflows):
     average_CLS /= len(listOfTurnsCLS)
     CLS.append(average_CLS)
     
-    curNumCoflows += stepSize
+    curNumCores += stepSize
     
 # 設定圖片大小為長15、寬10
 
 plt.figure(figsize=(15,10),dpi=100,linewidth = 2)
 
 
-plt.plot(numOfCoflows,CLS,'s-',color = 'r', label="CLS")
+plt.plot(numOfCores,CLS,'s-',color = 'r', label="CLS")
 
 
 # 設定圖片標題，以及指定字型設定，x代表與圖案最左側的距離，y代表與圖片的距離

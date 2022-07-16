@@ -1,0 +1,12 @@
+1. Dense and Combined (custom) OK
+
+2. Coflow collection threshold (benchmark) OK
+
+3. Number of coflows (custom) OK
+
+4. CDF, use makespan for x axis (custom)
+
+5. Weaver heter (custom)
+
+6. Number of cores (custom) OK
+

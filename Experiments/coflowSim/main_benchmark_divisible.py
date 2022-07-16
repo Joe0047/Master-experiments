@@ -231,7 +231,7 @@ plt.plot(thresNumOfFlows,Weaver,'^-',color = 'b', label="Weaver")
 
 plt.title("Divisible coflows from benchmark", size=40, x=0.5, y=1.03)
 
-# 设置刻度字体大小
+# 設置刻度字體大小
 
 plt.xticks(fontsize=20)
 

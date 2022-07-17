@@ -4,9 +4,9 @@
 
 3. Number of coflows (custom) OK
 
-4. CDF, use makespan for x axis (custom)
+4. CDF, use makespan for x axis (custom) OK
 
-5. Weaver heter (custom)
+5. Weaver heter (custom) OK
 
 6. Number of cores (custom) OK
 

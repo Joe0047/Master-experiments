@@ -9,7 +9,10 @@ import matplotlib.pyplot as plt
 completionTimeOfCoreFLS = []
 completionTimeOfCoreFLPT = []
 completionTimeOfCoreWeaver = []
-CDF = []
+completionTimeOfCore = []
+cdfOfFLS = []
+cdfOfFLPT = []
+cdfOfWeaver = []
 
 numRacks = 50
 numJobs = 120
@@ -221,22 +224,61 @@ print('Weaver: %f' % makespan_Weaver)
 print(makespan_Weaver / mod.objVal)
 print("========================================================")
 
-for h in range(M):
-    CDF.append((h+1)/M)
+completionTimeOfCore.extend(completionTimeOfCoreFLS)
+completionTimeOfCore.extend(completionTimeOfCoreFLPT)
+completionTimeOfCore.extend(completionTimeOfCoreWeaver)
 
+completionTimeOfCore.sort()
+
+for i in range(len(completionTimeOfCore)):
+    j = 0
+    while(j < len(completionTimeOfCoreFLS)):
+        if completionTimeOfCoreFLS[j] > completionTimeOfCore[i]:
+            cdfOfFLS.append(j/M)
+            break
+        
+        if j == len(completionTimeOfCoreFLS) - 1:
+            cdfOfFLS.append((j+1)/M)
+        
+        j += 1
+        
+for i in range(len(completionTimeOfCore)):
+    j = 0
+    while(j < len(completionTimeOfCoreFLPT)):
+        if completionTimeOfCoreFLPT[j] > completionTimeOfCore[i]:
+            cdfOfFLPT.append(j/M)
+            break
+        
+        if j == len(completionTimeOfCoreFLPT) - 1:
+            cdfOfFLPT.append((j+1)/M)
+        
+        j += 1
+
+for i in range(len(completionTimeOfCore)):
+    j = 0
+    while(j < len(completionTimeOfCoreWeaver)):
+        if completionTimeOfCoreWeaver[j] > completionTimeOfCore[i]:
+            cdfOfWeaver.append(j/M)
+            break
+        
+        if j == len(completionTimeOfCoreWeaver) - 1:
+            cdfOfWeaver.append((j+1)/M)
+        
+        j += 1
+        
 
 # 設定圖片大小為長15、寬10
 
 plt.figure(figsize=(15,10),dpi=100,linewidth = 2)
 
 
-plt.plot(completionTimeOfCoreFLS,CDF,'s-',color = 'r', label="FLS")
+plt.plot(completionTimeOfCore,cdfOfFLS,'s-',color = 'r', label="FLS")
 
 
-plt.plot(completionTimeOfCoreFLPT,CDF,'o-',color = 'g', label="FLPT")
+plt.plot(completionTimeOfCore,cdfOfFLPT,'o-',color = 'g', label="FLPT")
 
 
-plt.plot(completionTimeOfCoreWeaver,CDF,'^-',color = 'b', label="Weaver")
+plt.plot(completionTimeOfCore,cdfOfWeaver,'^-',color = 'b', label="Weaver")
 
 
 # 設定圖片標題，以及指定字型設定，x代表與圖案最左側的距離，y代表與圖片的距離

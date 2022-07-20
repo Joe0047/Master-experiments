@@ -492,13 +492,17 @@ plt.bar(x+width+width,Weaver,width,color = 'b', label="Weaver")
 
 # 設定圖片標題，以及指定字型設定，x代表與圖案最左側的距離，y代表與圖片的距離
 
-plt.title("Indivisible coflows from custom", size=40, x=0.5, y=1.03)
+plt.title("Divisible coflows from custom", size=40, x=0.5, y=1.03)
 
 # 設置刻度字體大小
 
 plt.xticks(x+width,instanceOfCoflows,fontsize=20)
 
 plt.yticks(fontsize=20)
+
+# 設置數值不使用科學記號表示
+
+plt.ticklabel_format(style='plain')
 
 # 標示x軸(labelpad代表與圖片的距離)
 

@@ -272,6 +272,10 @@ plt.plot(numOfCoflows,Weaver,'^-',color = 'b', label="Weaver")
 
 plt.title("Divisible coflows from custom", size=40, x=0.5, y=1.03)
 
+# 設置數值不使用科學記號表示
+
+plt.ticklabel_format(style='plain')
+
 # 設置刻度字體大小
 
 plt.xticks(fontsize=20)

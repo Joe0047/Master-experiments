@@ -278,10 +278,6 @@ plt.xticks(fontsize=20)
 
 plt.yticks(fontsize=20)
 
-# 設置數值不使用科學記號表示
-
-plt.ticklabel_format(style='plain')
-
 # 標示x軸(labelpad代表與圖片的距離)
 
 plt.xlabel("Number of cores", fontsize=30, labelpad = 15)

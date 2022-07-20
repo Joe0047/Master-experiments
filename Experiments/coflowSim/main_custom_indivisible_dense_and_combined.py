@@ -233,7 +233,6 @@ for c in listOfTurnsCombinedCLS:
     average_CombinedCLS += c
 average_CombinedCLS /= len(listOfTurnsCombinedCLS)
 CLS.append(average_CombinedCLS)
-    
 
 # 設定圖片大小為長15、寬10
 
@@ -255,10 +254,6 @@ plt.title("Indivisible coflows from custom", size=40, x=0.5, y=1.03)
 plt.xticks(x,instanceOfCoflows,fontsize=20)
 
 plt.yticks(fontsize=20)
-
-# 設置數值不使用科學記號表示
-
-plt.ticklabel_format(style='plain')
 
 # 標示x軸(labelpad代表與圖片的距離)
 

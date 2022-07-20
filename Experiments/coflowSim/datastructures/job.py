@@ -107,7 +107,7 @@ class Job:
         # Reset shuffle counters in job
         self.numReducers = 0
         self.totalShuffleBytes = 0
-   
+        
         for i in range(numRacks):
             if self.tasksInRacks[i] != None and len(self.tasksInRacks[i]) > 0:
                 self.numReducers += 1

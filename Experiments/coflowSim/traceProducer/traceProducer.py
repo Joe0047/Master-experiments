@@ -291,7 +291,6 @@ class CoflowBenchmarkTraceProducer(TraceProducer):
     def filterJobsByNumFlows(self, threshold):
         deleteJobs = []
         for i in range(self.jobs.size()):
-            #print(self.jobs.elementAt(i).getNumFlows())
             if self.jobs.elementAt(i).getNumFlows() < threshold:
                 deleteJobs.append(self.jobs.elementAt(i))
         

@@ -7,7 +7,7 @@ import numpy as np
 import matplotlib.pyplot as plt
 
 completionTimeOfCoreCLS = []
-CDF = []
+cdfOfCLS = []
 
 numRacks = 50
 numJobs = 120
@@ -110,15 +110,33 @@ print(makespan_CLS / mod.objVal)
 print("========================================================")
 
 for h in range(M):
-    CDF.append((h+1)/M)
+    cdfOfCLS.append((h+1)/M)
 
+algo = {'cdfOfCLS': cdfOfCLS}
+
+file = open('../result/custom_indivisible_CDF/custom_indivisible_CDF.txt','w')
+
+file.write(str(len(completionTimeOfCoreCLS)))
+for c in completionTimeOfCoreCLS:
+    file.write(' ' + str(c))
+file.write('\n')
+
+for key, values in algo.items():
+    file.write(key + ' ' + str(len(values)))
     
+    for value in values:
+        file.write(' ' + str(value))
+        
+    file.write('\n')
+
+file.close()
+
 # 設定圖片大小為長15、寬10
 
 plt.figure(figsize=(15,10),dpi=100,linewidth = 2)
 
 
-plt.plot(completionTimeOfCoreCLS,CDF,'s-',color = 'r', label="CLS")
+plt.plot(completionTimeOfCoreCLS,cdfOfCLS,'s-',color = 'r', label="CLS")
 
 
 # 設定圖片標題，以及指定字型設定，x代表與圖案最左側的距離，y代表與圖片的距離

@@ -266,6 +266,24 @@ for i in range(len(completionTimeOfCore)):
         
         j += 1
         
+algo = {'cdfOfFLS': cdfOfFLS, 'cdfOfFLPT': cdfOfFLPT, 'cdfOfWeaver': cdfOfWeaver}
+
+file = open('../result/custom_divisible_CDF/custom_divisible_CDF.txt','w')
+
+file.write(str(len(completionTimeOfCore)))
+for c in completionTimeOfCore:
+    file.write(' ' + str(c))
+file.write('\n')
+
+for key, values in algo.items():
+    file.write(key + ' ' + str(len(values)))
+    
+    for value in values:
+        file.write(' ' + str(value))
+        
+    file.write('\n')
+
+file.close()
 
 # 設定圖片大小為長15、寬10
 

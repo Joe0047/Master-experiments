@@ -226,8 +226,16 @@ while(turn > 0):
 algo = {'FLS': FLS, 'FLPT': FLPT, 'Weaver': Weaver}
 
 file = open('../result/custom_divisible_box_plot/custom_divisible_box_plot.txt','w')
-file.write(str(algo))
+for key, values in algo.items():
+    file.write(key + ' ' + str(len(values)))
+    
+    for value in values:
+        file.write(' ' + str(value))
+        
+    file.write('\n')
+
 file.close()
+
 
 # 設定圖片大小為長15、寬10
 

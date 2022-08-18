@@ -7,6 +7,9 @@ import numpy as np
 import matplotlib.pyplot as plt
 
 numOfCoflows = []
+rawFLS = []
+rawFLPT = []
+rawWeaver = []
 FLS = []
 FLPT = []
 Weaver = []
@@ -20,7 +23,7 @@ while(curNumCoflows <= lastNumCoflows):
     numOfCoflows.append(curNumCoflows)
     
     rseed = 13
-    turn = 5
+    turn = 100
     listOfTurnsFLS = []
     average_FLS = 0
     listOfTurnsFLPT = []
@@ -242,21 +245,39 @@ while(curNumCoflows <= lastNumCoflows):
     average_FLS /= len(listOfTurnsFLS)
     FLS.append(average_FLS)
     
+    rawFLS.append(listOfTurnsFLS)
+    
     for f in listOfTurnsFLPT:
         average_FLPT += f
     average_FLPT /= len(listOfTurnsFLPT)
     FLPT.append(average_FLPT)
+    
+    rawFLPT.append(listOfTurnsFLPT)
     
     for w in listOfTurnsWeaver:
         average_Weaver += w
     average_Weaver /= len(listOfTurnsWeaver)
     Weaver.append(average_Weaver)
     
+    rawWeaver.append(listOfTurnsWeaver)
+    
     curNumCoflows += stepSize
 
+raw = {'rawFLS': rawFLS, 'rawFLPT': rawFLPT, 'rawWeaver': rawWeaver}
 algo = {'FLS': FLS, 'FLPT': FLPT, 'Weaver': Weaver}
 
 file = open('../result/custom_divisible/custom_divisible.txt','w')
+
+for key, values in raw.items():
+    file.write(key + ' ' + str(len(values)))
+    
+    for value in values:
+        file.write(' ' + str(len(value)))
+        for v in value:
+            file.write(' ' + str(v))
+        
+    file.write('\n')
+    
 for key, values in algo.items():
     file.write(key + ' ' + str(len(values)))
     

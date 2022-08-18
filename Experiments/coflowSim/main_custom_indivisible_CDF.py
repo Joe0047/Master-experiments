@@ -116,7 +116,7 @@ algo = {'cdfOfCLS': cdfOfCLS}
 
 file = open('../result/custom_indivisible_CDF/custom_indivisible_CDF.txt','w')
 
-file.write(str(len(completionTimeOfCoreCLS)))
+file.write('completionTimeOfCore ' + str(len(completionTimeOfCoreCLS)))
 for c in completionTimeOfCoreCLS:
     file.write(' ' + str(c))
 file.write('\n')

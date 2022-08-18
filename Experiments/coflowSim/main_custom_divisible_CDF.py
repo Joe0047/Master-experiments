@@ -270,7 +270,7 @@ algo = {'cdfOfFLS': cdfOfFLS, 'cdfOfFLPT': cdfOfFLPT, 'cdfOfWeaver': cdfOfWeaver
 
 file = open('../result/custom_divisible_CDF/custom_divisible_CDF.txt','w')
 
-file.write(str(len(completionTimeOfCore)))
+file.write('completionTimeOfCore ' + str(len(completionTimeOfCore)))
 for c in completionTimeOfCore:
     file.write(' ' + str(c))
 file.write('\n')

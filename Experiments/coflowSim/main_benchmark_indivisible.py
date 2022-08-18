@@ -105,6 +105,19 @@ while(curThresNumFlows <= lastThresNumFlows):
     
     curThresNumFlows += stepThresSize
 
+algo = {'CLS': CLS}
+
+file = open('../result/benchmark_indivisible/benchmark_indivisible.txt','w')
+for key, values in algo.items():
+    file.write(key + ' ' + str(len(values)))
+    
+    for value in values:
+        file.write(' ' + str(value))
+        
+    file.write('\n')
+
+file.close()
+
 # 設定圖片大小為長15、寬10
 
 plt.figure(figsize=(15,10),dpi=100,linewidth = 2)

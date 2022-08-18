@@ -236,7 +236,6 @@ for key, values in algo.items():
 
 file.close()
 
-
 # 設定圖片大小為長15、寬10
 
 fig, ax = plt.subplots(figsize=(15,10))

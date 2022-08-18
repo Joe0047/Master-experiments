@@ -234,6 +234,19 @@ for c in listOfTurnsCombinedCLS:
 average_CombinedCLS /= len(listOfTurnsCombinedCLS)
 CLS.append(average_CombinedCLS)
 
+algo = {'CLS': CLS}
+
+file = open('../result/custom_indivisible_dense_and_combined/custom_indivisible_dense_and_combined.txt','w')
+for key, values in algo.items():
+    file.write(key + ' ' + str(len(values)))
+    
+    for value in values:
+        file.write(' ' + str(value))
+        
+    file.write('\n')
+
+file.close()
+
 # 設定圖片大小為長15、寬10
 
 plt.figure(figsize=(15,10),dpi=100,linewidth = 2)

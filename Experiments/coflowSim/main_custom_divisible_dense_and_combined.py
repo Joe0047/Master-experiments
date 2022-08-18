@@ -8,12 +8,15 @@ import numpy as np
 import matplotlib.pyplot as plt
 
 instanceOfCoflows = ["Dense", "Combined"]
+rawFLS = []
+rawFLPT = []
+rawWeaver = []
 FLS = []
 FLPT = []
 Weaver = []
 
 rseed = 13
-turn = 5
+turn = 100
 listOfTurnsDenseFLS = []
 average_DenseFLS = 0
 listOfTurnsDenseFLPT = []
@@ -22,6 +25,8 @@ listOfTurnsDenseWeaver = []
 average_DenseWeaver = 0
 
 while(turn > 0):
+    print('Dense')
+    print(turn)
     numRacks = 25
     numJobs = 120
     randomSeed = rseed
@@ -229,18 +234,24 @@ for f in listOfTurnsDenseFLS:
 average_DenseFLS /= len(listOfTurnsDenseFLS)
 FLS.append(average_DenseFLS)
 
+rawFLS.append(listOfTurnsDenseFLS)
+
 for f in listOfTurnsDenseFLPT:
     average_DenseFLPT += f
 average_DenseFLPT /= len(listOfTurnsDenseFLPT)
 FLPT.append(average_DenseFLPT)
+
+rawFLPT.append(listOfTurnsDenseFLPT)
 
 for w in listOfTurnsDenseWeaver:
     average_DenseWeaver += w
 average_DenseWeaver /= len(listOfTurnsDenseWeaver)
 Weaver.append(average_DenseWeaver)
 
+rawWeaver.append(listOfTurnsDenseWeaver)
+
 rseed = 13
-turn = 5
+turn = 100
 listOfTurnsCombinedFLS = []
 average_CombinedFLS = 0
 listOfTurnsCombinedFLPT = []
@@ -249,6 +260,8 @@ listOfTurnsCombinedWeaver = []
 average_CombinedWeaver = 0
 
 while(turn > 0):
+    print('Combined')
+    print(turn)
     numRacks = 25
     numJobs = 120
     randomSeed = rseed
@@ -465,19 +478,37 @@ for f in listOfTurnsCombinedFLS:
 average_CombinedFLS /= len(listOfTurnsCombinedFLS)
 FLS.append(average_CombinedFLS)
 
+rawFLS.append(listOfTurnsCombinedFLS)
+
 for f in listOfTurnsCombinedFLPT:
     average_CombinedFLPT += f
 average_CombinedFLPT /= len(listOfTurnsCombinedFLPT)
 FLPT.append(average_CombinedFLPT)
+
+rawFLPT.append(listOfTurnsCombinedFLPT)
 
 for w in listOfTurnsCombinedWeaver:
     average_CombinedWeaver += w
 average_CombinedWeaver /= len(listOfTurnsCombinedWeaver)
 Weaver.append(average_CombinedWeaver)
 
+rawWeaver.append(listOfTurnsCombinedWeaver)
+
+raw = {'rawFLS': rawFLS, 'rawFLPT': rawFLPT, 'rawWeaver': rawWeaver}
 algo = {'FLS': FLS, 'FLPT': FLPT, 'Weaver': Weaver}
 
 file = open('../result/custom_divisible_dense_and_combined/custom_divisible_dense_and_combined.txt','w')
+
+for key, values in raw.items():
+    file.write(key + ' ' + str(len(values)))
+    
+    for value in values:
+        file.write(' ' + str(len(value)))
+        for v in value:
+            file.write(' ' + str(v))
+        
+    file.write('\n')
+    
 for key, values in algo.items():
     file.write(key + ' ' + str(len(values)))
     

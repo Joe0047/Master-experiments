@@ -19,7 +19,6 @@ lastNumCoflows = 120
 stepSize = 10
 
 while(curNumCoflows <= lastNumCoflows):
-    print(curNumCoflows)
     numOfCoflows.append(curNumCoflows)
     
     rseed = 13
@@ -32,6 +31,8 @@ while(curNumCoflows <= lastNumCoflows):
     average_Weaver = 0
     
     while(turn > 0):
+        print(curNumCoflows)
+        print(turn)
         numRacks = 50
         numJobs = curNumCoflows
         randomSeed = rseed

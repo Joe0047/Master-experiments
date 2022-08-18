@@ -7,6 +7,9 @@ import numpy as np
 import matplotlib.pyplot as plt
 
 numOfCores = []
+rawFLS = []
+rawFLPT = []
+rawWeaver = []
 FLS = []
 FLPT = []
 Weaver = []
@@ -16,11 +19,10 @@ lastNumCores = 50
 stepSize = 5
 
 while(curNumCores <= lastNumCores):
-    print(curNumCores)
     numOfCores.append(curNumCores)
     
     rseed = 13
-    turn = 5
+    turn = 100
     listOfTurnsFLS = []
     average_FLS = 0
     listOfTurnsFLPT = []
@@ -29,6 +31,8 @@ while(curNumCores <= lastNumCores):
     average_Weaver = 0
     
     while(turn > 0):
+        print(curNumCores)
+        print(turn)
         numRacks = 50
         numJobs = 100
         randomSeed = rseed
@@ -242,21 +246,39 @@ while(curNumCores <= lastNumCores):
     average_FLS /= len(listOfTurnsFLS)
     FLS.append(average_FLS)
     
+    rawFLS.append(listOfTurnsFLS)
+    
     for f in listOfTurnsFLPT:
         average_FLPT += f
     average_FLPT /= len(listOfTurnsFLPT)
     FLPT.append(average_FLPT)
+    
+    rawFLPT.append(listOfTurnsFLPT)
     
     for w in listOfTurnsWeaver:
         average_Weaver += w
     average_Weaver /= len(listOfTurnsWeaver)
     Weaver.append(average_Weaver)
     
+    rawWeaver.append(listOfTurnsWeaver)
+    
     curNumCores += stepSize
 
+raw = {'rawFLS': rawFLS, 'rawFLPT': rawFLPT, 'rawWeaver': rawWeaver}
 algo = {'FLS': FLS, 'FLPT': FLPT, 'Weaver': Weaver}
 
 file = open('../result/custom_divisible_num_of_core/custom_divisible_num_of_core.txt','w')
+
+for key, values in raw.items():
+    file.write(key + ' ' + str(len(values)))
+    
+    for value in values:
+        file.write(' ' + str(len(value)))
+        for v in value:
+            file.write(' ' + str(v))
+        
+    file.write('\n')
+
 for key, values in algo.items():
     file.write(key + ' ' + str(len(values)))
     

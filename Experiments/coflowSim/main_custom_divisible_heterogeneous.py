@@ -14,8 +14,9 @@ coreSpeedDistribution = [[[1,9], [2,8], [3,7], [4,6], [5,5]],
 
 for speedListOfCores in coreSpeedDistribution:
     curNumCores = len(speedListOfCores[0])
-    print(curNumCores)
     
+    rawFLPT = []
+    rawWeaver = []
     FLPT = []
     Weaver = []
     
@@ -25,7 +26,7 @@ for speedListOfCores in coreSpeedDistribution:
     
     for speedIndex in speedListOfCores:
         rseed = 13
-        turn = 5
+        turn = 100
         
         listOfTurnsFLPT = []
         average_FLPT = 0
@@ -33,6 +34,9 @@ for speedListOfCores in coreSpeedDistribution:
         average_Weaver = 0
         
         while(turn > 0):
+            print(curNumCores)
+            print(i+1)
+            print(turn)
             numRacks = 50
             numJobs = 100
             randomSeed = rseed
@@ -210,14 +214,30 @@ for speedListOfCores in coreSpeedDistribution:
         average_FLPT /= len(listOfTurnsFLPT)
         FLPT.append(average_FLPT)
         
+        rawFLPT.append(listOfTurnsFLPT)
+        
         for w in listOfTurnsWeaver:
             average_Weaver += w
         average_Weaver /= len(listOfTurnsWeaver)
         Weaver.append(average_Weaver)
+        
+        rawWeaver.append(listOfTurnsWeaver)
     
+    raw = {'rawFLPT': rawFLPT, 'rawWeaver': rawWeaver}
     algo = {'FLPT': FLPT, 'Weaver': Weaver}
 
     file = open('../result/custom_divisible_heterogeneous/custom_divisible_heterogeneous_core' + str(curNumCores) + '.txt','w')
+    
+    for key, values in raw.items():
+        file.write(key + ' ' + str(len(values)))
+        
+        for value in values:
+            file.write(' ' + str(len(value)))
+            for v in value:
+                file.write(' ' + str(v))
+            
+        file.write('\n')
+    
     for key, values in algo.items():
         file.write(key + ' ' + str(len(values)))
         

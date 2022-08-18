@@ -8,14 +8,17 @@ import numpy as np
 import matplotlib.pyplot as plt
 
 instanceOfCoflows = ["Dense", "Combined"]
+rawCLS = []
 CLS = []
 
 rseed = 13
-turn = 5
+turn = 100
 listOfTurnsDenseCLS = []
 average_DenseCLS = 0
 
 while(turn > 0):
+    print('Dense')
+    print(turn)
     numRacks = 25
     numJobs = 120
     randomSeed = rseed
@@ -117,6 +120,7 @@ for c in listOfTurnsDenseCLS:
 average_DenseCLS /= len(listOfTurnsDenseCLS)
 CLS.append(average_DenseCLS)
 
+rawCLS.append(listOfTurnsDenseCLS)
 
 rseed = 13
 turn = 5
@@ -124,6 +128,8 @@ listOfTurnsCombinedCLS = []
 average_CombinedCLS = 0
 
 while(turn > 0):
+    print('Combined')
+    print(turn)
     numRacks = 25
     numJobs = 120
     randomSeed = rseed
@@ -234,9 +240,23 @@ for c in listOfTurnsCombinedCLS:
 average_CombinedCLS /= len(listOfTurnsCombinedCLS)
 CLS.append(average_CombinedCLS)
 
+rawCLS.append(listOfTurnsCombinedCLS)
+
+raw = {'rawCLS': rawCLS}
 algo = {'CLS': CLS}
 
 file = open('../result/custom_indivisible_dense_and_combined/custom_indivisible_dense_and_combined.txt','w')
+
+for key, values in raw.items():
+    file.write(key + ' ' + str(len(values)))
+    
+    for value in values:
+        file.write(' ' + str(len(value)))
+        for v in value:
+            file.write(' ' + str(v))
+        
+    file.write('\n')
+
 for key, values in algo.items():
     file.write(key + ' ' + str(len(values)))
     

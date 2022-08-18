@@ -5,6 +5,7 @@ from datastructures.jobCollection import *
 from simulator.simulator import *
 import numpy as np
 import matplotlib.pyplot as plt
+import pandas as pd
 
 CLS = []
 
@@ -125,6 +126,9 @@ for key, values in algo.items():
         file.write(' ' + str(value))
         
     file.write('\n')
+
+pd_CLS = pd.Series(CLS)
+file.write('Q1,Q2,Q3,mean ' + str(4) + ' ' + pd_CLS.quantile(0.25) + ' ' + pd_CLS.quantile(0.5) + ' ' + pd_CLS.quantile(0.75) + ' ' + pd_CLS.mean() + '\n')
 
 file.close()
     

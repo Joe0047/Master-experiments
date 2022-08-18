@@ -7,6 +7,7 @@ import numpy as np
 import matplotlib.pyplot as plt
 
 numOfCoflows = []
+rawCLS = []
 CLS = []
 
 curNumCoflows = 30
@@ -14,15 +15,16 @@ lastNumCoflows = 120
 stepSize = 10
 
 while(curNumCoflows <= lastNumCoflows):
-    print(curNumCoflows)
     numOfCoflows.append(curNumCoflows)
     
     rseed = 13
-    turn = 5
+    turn = 100
     listOfTurnsCLS = []
     average_CLS = 0
     
     while(turn > 0):
+        print(curNumCoflows)
+        print(turn)
         numRacks = 50
         numJobs = curNumCoflows
         randomSeed = rseed
@@ -130,11 +132,25 @@ while(curNumCoflows <= lastNumCoflows):
     average_CLS /= len(listOfTurnsCLS)
     CLS.append(average_CLS)
     
-    curNumCoflows += stepSize
+    rawCLS.append(listOfTurnsCLS)
     
+    curNumCoflows += stepSize
+
+raw = {'rawCLS': rawCLS}
 algo = {'CLS': CLS}
 
 file = open('../result/custom_indivisible/custom_indivisible.txt','w')
+
+for key, values in raw.items():
+    file.write(key + ' ' + str(len(values)))
+    
+    for value in values:
+        file.write(' ' + str(len(value)))
+        for v in value:
+            file.write(' ' + str(v))
+        
+    file.write('\n')
+
 for key, values in algo.items():
     file.write(key + ' ' + str(len(values)))
     

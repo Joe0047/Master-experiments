@@ -236,13 +236,13 @@ for key, values in algo.items():
     file.write('\n')
 
 pd_FLS = pd.Series(FLS)
-file.write('Q1,Q2,Q3,mean ' + str(4) + ' ' + pd_FLS.quantile(0.25) + ' ' + pd_FLS.quantile(0.5) + ' ' + pd_FLS.quantile(0.75) + ' ' + pd_FLS.mean() + '\n')
+file.write('Q1,Q2,Q3,mean ' + str(4) + ' ' + str(pd_FLS.quantile(0.25)) + ' ' + str(pd_FLS.quantile(0.5)) + ' ' + str(pd_FLS.quantile(0.75)) + ' ' + str(pd_FLS.mean()) + '\n')
 
 pd_FLPT = pd.Series(FLPT)
-file.write('Q1,Q2,Q3,mean ' + str(4) + ' ' + pd_FLPT.quantile(0.25) + ' ' + pd_FLPT.quantile(0.5) + ' ' + pd_FLPT.quantile(0.75) + ' ' + pd_FLPT.mean() + '\n')
+file.write('Q1,Q2,Q3,mean ' + str(4) + ' ' + str(pd_FLPT.quantile(0.25)) + ' ' + str(pd_FLPT.quantile(0.5)) + ' ' + str(pd_FLPT.quantile(0.75)) + ' ' + str(pd_FLPT.mean()) + '\n')
 
 pd_Weaver = pd.Series(Weaver)
-file.write('Q1,Q2,Q3,mean ' + str(4) + ' ' + pd_Weaver.quantile(0.25) + ' ' + pd_Weaver.quantile(0.5) + ' ' + pd_Weaver.quantile(0.75) + ' ' + pd_Weaver.mean() + '\n')
+file.write('Q1,Q2,Q3,mean ' + str(4) + ' ' + str(pd_Weaver.quantile(0.25)) + ' ' + str(pd_Weaver.quantile(0.5)) + ' ' + str(pd_Weaver.quantile(0.75)) + ' ' + str(pd_Weaver.mean()) + '\n')
 
 file.close()
 

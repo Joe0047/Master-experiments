@@ -11,8 +11,8 @@ rawCLS = []
 CLS = []
 
 curNumCoflows = 30
-lastNumCoflows = 120
-stepSize = 10
+lastNumCoflows = 110
+stepSize = 20
 
 while(curNumCoflows <= lastNumCoflows):
     numOfCoflows.append(curNumCoflows)

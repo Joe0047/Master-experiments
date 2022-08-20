@@ -14,9 +14,9 @@ FLS = []
 FLPT = []
 Weaver = []
 
-curNumCores = 5
+curNumCores = 10
 lastNumCores = 50
-stepSize = 5
+stepSize = 10
 
 while(curNumCores <= lastNumCores):
     numOfCores.append(curNumCores)

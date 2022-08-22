@@ -123,7 +123,7 @@ CLS.append(average_DenseCLS)
 rawCLS.append(listOfTurnsDenseCLS)
 
 rseed = 13
-turn = 5
+turn = 100
 listOfTurnsCombinedCLS = []
 average_CombinedCLS = 0
 

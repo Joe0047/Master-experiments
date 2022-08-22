@@ -136,6 +136,8 @@ for speedListOfCores in coreSpeedDistribution:
             # Weaver
             loadI = np.zeros((M,I))
             loadO = np.zeros((M,J))
+            L_add = [0 for h in range(M)]
+            L = [0 for h in range(M)]
             A = [[] for h in range(M)]
             
             flowlist.sort(key = lambda f: f[0], reverse = True)
@@ -148,28 +150,17 @@ for speedListOfCores in coreSpeedDistribution:
                     loadI[h][f[1]] += f[0]
                     loadO[h][f[2]] += f[0]
                     
-                    maxload1 = float("-inf")
-                    for i in range(I):
-                        if loadI[h][i] > maxload1:
-                            maxload1 = loadI[h][i]
-                    for j in range(J):
-                        if loadO[h][j] > maxload1:
-                            maxload1 = loadO[h][j]
+                    if loadI[h][f[1]] > L_add[h]:
+                        L_add[h] = loadI[h][f[1]]
+                    if loadO[h][f[2]] > L_add[h]:
+                        L_add[h] = loadO[h][f[2]]
                     
                     loadI[h][f[1]] -= f[0]
                     loadO[h][f[2]] -= f[0]
                     
-                    maxload2 = float("-inf")
-                    for i in range(I):
-                        if loadI[h][i] > maxload2:
-                            maxload2 = loadI[h][i]
-                    for j in range(J):
-                        if loadO[h][j] > maxload2:
-                            maxload2 = loadO[h][j]
-                    
-                    if (maxload1 > maxload2) and (maxload1 / speedIndex[h] < minload):
+                    if (L_add[h] > L[h]) and (L_add[h] / speedIndex[h] < minload):
                         h_star = h
-                        minload = maxload1 / speedIndex[h]
+                        minload = L_add[h] / speedIndex[h]
                 
                 if h_star == -1:
                     minload = float("inf")
@@ -177,18 +168,25 @@ for speedListOfCores in coreSpeedDistribution:
                         loadI[h][f[1]] += f[0]
                         loadO[h][f[2]] += f[0]
                         
-                        maxload1 = max(loadI[h][f[1]], loadO[h][f[2]]) / speedIndex[h]
+                        maxload = max(loadI[h][f[1]], loadO[h][f[2]]) / speedIndex[h]
                         
                         loadI[h][f[1]] -= f[0]
                         loadO[h][f[2]] -= f[0]
                         
-                        if maxload1 < minload:
+                        if maxload < minload:
                             h_star = h
-                            minload = maxload1
+                            minload = maxload
                 
                 A[h_star].append(f[3])
                 loadI[h_star][f[1]] += f[0]
                 loadO[h_star][f[2]] += f[0]
+                
+                if loadI[h_star][f[1]] > L[h_star]:
+                    L[h_star] = loadI[h_star][f[1]]
+                if loadO[h_star][f[2]] > L[h_star]:
+                    L[h_star] = loadO[h_star][f[2]]
+                
+                L_add = L.copy()
             
             makespan_Weaver = float("-inf")
             

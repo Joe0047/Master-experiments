@@ -38,7 +38,7 @@ for speedListOfCores in coreSpeedDistribution:
             print(i+1)
             print(turn)
             numRacks = 50
-            numJobs = 100
+            numJobs = 50
             randomSeed = rseed
             
             jobClassDescs = [JobClassDescription(1, 5, 1, 10),

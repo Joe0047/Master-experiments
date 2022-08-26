@@ -24,6 +24,7 @@ for speedListOfCores in coreSpeedDistribution:
     for i in range(len(speedListOfCores)):
         indexOfCores.append(i+1)
     
+    index = 1
     for speedIndex in speedListOfCores:
         rseed = 13
         turn = 100
@@ -35,10 +36,10 @@ for speedListOfCores in coreSpeedDistribution:
         
         while(turn > 0):
             print(curNumCores)
-            print(i+1)
+            print(index)
             print(turn)
             numRacks = 50
-            numJobs = 50
+            numJobs = 100
             randomSeed = rseed
             
             jobClassDescs = [JobClassDescription(1, 5, 1, 10),
@@ -220,6 +221,8 @@ for speedListOfCores in coreSpeedDistribution:
         Weaver.append(average_Weaver)
         
         rawWeaver.append(listOfTurnsWeaver)
+        
+        index += 1
     
     raw = {'rawFLPT': rawFLPT, 'rawWeaver': rawWeaver}
     algo = {'FLPT': FLPT, 'Weaver': Weaver}

@@ -1,4 +1,4 @@
-# 安裝流程
+# 安裝Gurobi及跑實驗流程
 
 1. 請按照以下李家岩教授的教學網址，申請Gurobi帳號以及Gurobi license。
 

@@ -6,4 +6,4 @@ https://github.com/wurmen/Gurobi-Python/blob/master/Installation/%E5%AE%89%E8%A3
 若為Linux，參考:
 https://github.com/PO-LAB/Python-Gurobi-Pulp/blob/master/Installation/installation-for-linux.md
 
-2. 
+2. 哈

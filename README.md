@@ -28,5 +28,5 @@ https://github.com/PO-LAB/Python-Gurobi-Pulp/blob/master/Installation/installati
 * main_custom_indivisible_num_of_core.py
 * main_custom_indivisible_time_complexity.py
 
-若要使用Spyder或Jupyter等其他程式編譯器，請確認是否有安裝gurobi package，之後打開xxx.py檔，按下執行鍵便可執行；若要使用cmd，請至主程式.py所在的位置，打開cmd並輸入python xxx.py，便可執行。
+若要使用 Spyder 或 Jupyter 等其他程式編譯器，請確認是否有安裝 gurobi package，之後打開 xxx.py，按下執行鍵便可執行；若要使用cmd，請至主程式 .py 所在的位置，打開 cmd 並輸入 python xxx.py，便可執行。
 

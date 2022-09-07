@@ -11,6 +11,7 @@ FLS = []
 FLPT = []
 Weaver = []
 
+# set the threshold of the number of flows
 curThresNumFlows = 200
 lastThresNumFlows = 1000
 stepThresSize = 200
@@ -30,18 +31,17 @@ while(curThresNumFlows <= lastThresNumFlows):
     N = tr.getNumRacks()
     I = N
     J = N
+    
+    # set the number of cores
     M = 5
     
     d, flowlist = tr.produceFlowSizeAndList()
              
-    # LP_DC
+    # Relaxed Linear Program of Divisible Coflows
     mod = Model("LP_DC")
     
     x = mod.addVars(K, I, J, M, lb = 0.0, ub = 1.0, vtype = GRB.CONTINUOUS)
     T = mod.addVar(vtype = GRB.CONTINUOUS)
-    
-    #x = mod.addVars(K, I, J, M, vtype = GRB.BINARY)
-    #T = mod.addVar(vtype = GRB.INTEGER)
     
     mod.update()
     
@@ -62,6 +62,7 @@ while(curThresNumFlows <= lastThresNumFlows):
     
     mod.optimize()
     
+    # set timestep
     EPOCH_IN_MILLIS = Constants.SIMULATION_QUANTA
     
     # FLS

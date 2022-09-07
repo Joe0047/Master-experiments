@@ -8,6 +8,7 @@ import matplotlib.pyplot as plt
 thresNumOfFlows = []
 CLS = []
 
+# set the threshold of the number of flows
 curThresNumFlows = 200
 lastThresNumFlows = 1000
 stepThresSize = 200
@@ -27,17 +28,17 @@ while(curThresNumFlows <= lastThresNumFlows):
     N = tr.getNumRacks()
     I = N
     J = N
+    
+    # set the number of cores
     M = 5
     
     li, lj, coflowlist = tr.produceCoflowSizeAndList()
     
-    # LP_IDC
+    # Relaxed Linear Program of Indivisible Coflows
     mod = Model("LP_IDC")
           
     x = mod.addVars(K, M, lb = 0.0, ub = 1.0, vtype = GRB.CONTINUOUS)
     T = mod.addVar(vtype = GRB.CONTINUOUS)
-    #x = mod.addVars(K, M, vtype = GRB.BINARY)
-    #T = mod.addVar(vtype = GRB.INTEGER)
     
     mod.update()
     
@@ -56,6 +57,7 @@ while(curThresNumFlows <= lastThresNumFlows):
     
     mod.optimize()
     
+    # set timestep
     EPOCH_IN_MILLIS = Constants.SIMULATION_QUANTA
     
     # CLS

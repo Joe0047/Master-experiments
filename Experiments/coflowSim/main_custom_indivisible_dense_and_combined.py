@@ -19,8 +19,13 @@ average_DenseCLS = 0
 while(turn > 0):
     print('Dense')
     print(turn)
+    
+    # set the number of ports
     numRacks = 25
+    
+    # set the number of coflows
     numJobs = 120
+    
     randomSeed = rseed
     
     jobClassDescs = [JobClassDescription(int(math.sqrt(numRacks)), numRacks, 1, 100)]
@@ -36,17 +41,17 @@ while(turn > 0):
     N = tr.getNumRacks()
     I = N
     J = N
+    
+    # set the number of cores
     M = 10
     
     li, lj, coflowlist = tr.produceCoflowSizeAndList()
     
-    # LP_IDC
+    # Relaxed Linear Program of Indivisible Coflows
     mod = Model("LP_IDC")
           
     x = mod.addVars(K, M, lb = 0.0, ub = 1.0, vtype = GRB.CONTINUOUS)
     T = mod.addVar(vtype = GRB.CONTINUOUS)
-    #x = mod.addVars(K, M, vtype = GRB.BINARY)
-    #T = mod.addVar(vtype = GRB.INTEGER)
     
     mod.update()
     
@@ -65,6 +70,7 @@ while(turn > 0):
     
     mod.optimize()
     
+    # set timestep
     EPOCH_IN_MILLIS = Constants.SIMULATION_QUANTA
     
     # CLS
@@ -130,8 +136,13 @@ average_CombinedCLS = 0
 while(turn > 0):
     print('Combined')
     print(turn)
+    
+    # set the number of ports
     numRacks = 25
+    
+    # set the number of coflows
     numJobs = 120
+    
     randomSeed = rseed
     random.seed(randomSeed)
     
@@ -156,17 +167,17 @@ while(turn > 0):
     N = tr.getNumRacks()
     I = N
     J = N
+    
+    # set the number of cores
     M = 10
     
     li, lj, coflowlist = tr.produceCoflowSizeAndList()
     
-    # LP_IDC
+    # Relaxed Linear Program of Indivisible Coflows
     mod = Model("LP_IDC")
           
     x = mod.addVars(K, M, lb = 0.0, ub = 1.0, vtype = GRB.CONTINUOUS)
     T = mod.addVar(vtype = GRB.CONTINUOUS)
-    #x = mod.addVars(K, M, vtype = GRB.BINARY)
-    #T = mod.addVar(vtype = GRB.INTEGER)
     
     mod.update()
     
@@ -185,6 +196,7 @@ while(turn > 0):
     
     mod.optimize()
     
+    # set timestep
     EPOCH_IN_MILLIS = Constants.SIMULATION_QUANTA
     
     # CLS

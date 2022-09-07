@@ -9,8 +9,12 @@ import matplotlib.pyplot as plt
 completionTimeOfCoreCLS = []
 cdfOfCLS = []
 
+# set the number of ports
 numRacks = 50
+
+# set the number of coflows
 numJobs = 120
+
 randomSeed = 13
 
 jobClassDescs = [JobClassDescription(1, 5, 1, 10),
@@ -32,17 +36,17 @@ K = tr.getNumJobs()
 N = tr.getNumRacks()
 I = N
 J = N
+
+# set the number of cores
 M = 50
 
 li, lj, coflowlist = tr.produceCoflowSizeAndList()
 
-# LP_IDC
+# Relaxed Linear Program of Indivisible Coflows
 mod = Model("LP_IDC")
       
 x = mod.addVars(K, M, lb = 0.0, ub = 1.0, vtype = GRB.CONTINUOUS)
 T = mod.addVar(vtype = GRB.CONTINUOUS)
-#x = mod.addVars(K, M, vtype = GRB.BINARY)
-#T = mod.addVar(vtype = GRB.INTEGER)
 
 mod.update()
 
@@ -61,6 +65,7 @@ mod.addConstrs(quicksum(lj[k,j]*x[k,h] for k in range(K)) <= T
 
 mod.optimize()
 
+# set timestep
 EPOCH_IN_MILLIS = Constants.SIMULATION_QUANTA
 
 # CLS

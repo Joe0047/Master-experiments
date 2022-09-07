@@ -38,8 +38,13 @@ for speedListOfCores in coreSpeedDistribution:
             print(curNumCores)
             print(index)
             print(turn)
+            
+            # set the number of ports
             numRacks = 50
+            
+            # set the number of coflows
             numJobs = 100
+            
             randomSeed = rseed
             
             jobClassDescs = [JobClassDescription(1, 5, 1, 10),
@@ -61,19 +66,17 @@ for speedListOfCores in coreSpeedDistribution:
             N = tr.getNumRacks()
             I = N
             J = N
+            
+            # set the number of cores
             M = curNumCores
             
             d, flowlist = tr.produceFlowSizeAndList()
                         
-            # LP_DC
+            # Relaxed Linear Program of Divisible Coflows
             mod = Model("LP_DC")
             
             x = mod.addVars(K, I, J, M, lb = 0.0, ub = 1.0, vtype = GRB.CONTINUOUS)
             T = mod.addVar(vtype = GRB.CONTINUOUS)
-            
-            #x = mod.addVars(K, I, J, M, vtype = GRB.BINARY)
-            #T = mod.addVar(vtype = GRB.INTEGER)
-            
             
             mod.update()
             
@@ -94,6 +97,7 @@ for speedListOfCores in coreSpeedDistribution:
             
             mod.optimize()
             
+            # set timestep
             EPOCH_IN_MILLIS = Constants.SIMULATION_QUANTA
             
             # FLPT

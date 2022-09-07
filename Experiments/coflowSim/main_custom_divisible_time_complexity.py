@@ -26,8 +26,12 @@ average_Weaver = 0
 
 while(turn > 0):
     print(turn)
+    # set the number of ports
     numRacks = 50
+    
+    # set the number of coflows
     numJobs = 100
+    
     randomSeed = rseed
     
     jobClassDescs = [JobClassDescription(1, 5, 1, 10),
@@ -49,6 +53,8 @@ while(turn > 0):
     N = tr.getNumRacks()
     I = N
     J = N
+    
+    # set the number of cores
     M = 10
     
     d, flowlist = tr.produceFlowSizeAndList()

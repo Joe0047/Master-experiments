@@ -14,6 +14,7 @@ FLS = []
 FLPT = []
 Weaver = []
 
+# set the number of coflows
 curNumCoflows = 30
 lastNumCoflows = 110
 stepSize = 20
@@ -33,7 +34,10 @@ while(curNumCoflows <= lastNumCoflows):
     while(turn > 0):
         print(curNumCoflows)
         print(turn)
+        
+        # set the number of ports
         numRacks = 50
+        
         numJobs = curNumCoflows
         randomSeed = rseed
         
@@ -56,19 +60,17 @@ while(curNumCoflows <= lastNumCoflows):
         N = tr.getNumRacks()
         I = N
         J = N
+        
+        # set the number of cores
         M = 10
         
         d, flowlist = tr.produceFlowSizeAndList()
                     
-        # LP_DC
+        # Relaxed Linear Program of Divisible Coflows
         mod = Model("LP_DC")
         
         x = mod.addVars(K, I, J, M, lb = 0.0, ub = 1.0, vtype = GRB.CONTINUOUS)
-        T = mod.addVar(vtype = GRB.CONTINUOUS)
-        
-        #x = mod.addVars(K, I, J, M, vtype = GRB.BINARY)
-        #T = mod.addVar(vtype = GRB.INTEGER)
-        
+        T = mod.addVar(vtype = GRB.CONTINUOUS)    
         
         mod.update()
         
@@ -89,6 +91,7 @@ while(curNumCoflows <= lastNumCoflows):
         
         mod.optimize()
         
+        # set timestep
         EPOCH_IN_MILLIS = Constants.SIMULATION_QUANTA
         
         # FLS

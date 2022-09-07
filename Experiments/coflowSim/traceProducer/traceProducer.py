@@ -26,6 +26,7 @@ class TraceProducer:
     def getMachinesPerRack(self):
         return self.MACHINES_PER_RACK
     
+    # produce flow list
     def produceFlowSizeAndList(self):
         d = np.zeros((self.numJobs, self.NUM_RACKS, self.NUM_RACKS))
         flowlist = []
@@ -44,6 +45,7 @@ class TraceProducer:
         
         return d, flowlist
     
+    # produce coflow list
     def produceCoflowSizeAndList(self):
         d = np.zeros((self.numJobs, self.NUM_RACKS, self.NUM_RACKS))
         for k in range(self.numJobs):
@@ -78,6 +80,7 @@ class TraceProducer:
     
         return li, lj, coflowlist
     
+    # initialize the size of all flows 
     def initFlowRemainingBytes(self):
         for k in range(self.numJobs):
             for t in self.jobs.elementAt(k).tasks:

@@ -14,8 +14,12 @@ cdfOfFLS = []
 cdfOfFLPT = []
 cdfOfWeaver = []
 
+# set the number of ports
 numRacks = 50
+
+# set the number of coflows
 numJobs = 120
+
 randomSeed = 13
 
 jobClassDescs = [JobClassDescription(1, 5, 1, 10),
@@ -37,19 +41,17 @@ K = tr.getNumJobs()
 N = tr.getNumRacks()
 I = N
 J = N
+
+# set the number of cores
 M = 50
 
 d, flowlist = tr.produceFlowSizeAndList()
             
-# LP_DC
+# Relaxed Linear Program of Divisible Coflows
 mod = Model("LP_DC")
 
 x = mod.addVars(K, I, J, M, lb = 0.0, ub = 1.0, vtype = GRB.CONTINUOUS)
 T = mod.addVar(vtype = GRB.CONTINUOUS)
-
-#x = mod.addVars(K, I, J, M, vtype = GRB.BINARY)
-#T = mod.addVar(vtype = GRB.INTEGER)
-
 
 mod.update()
 
@@ -70,6 +72,7 @@ mod.addConstrs(quicksum(d[k,i,j]*x[k,i,j,h] for i in range(I) for k in range(K))
 
 mod.optimize()
 
+# set timestep
 EPOCH_IN_MILLIS = Constants.SIMULATION_QUANTA
 
 # FLS

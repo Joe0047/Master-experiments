@@ -158,10 +158,10 @@ for speedListOfCores in coreSpeedDistribution:
                 
                 if flag == 1:
                     for h in range(M):
-                        maxload = max(max(loadI[h][f[1]]+f[0], loadO[h][f[2]]+f[0]), L[h])
+                        maxload = max(max(loadI[h][f[1]]+f[0], loadO[h][f[2]]+f[0]), L[h]) / speedIndex[h]
                         if maxload < minload:
                             h_star = h
-                            minload = maxload / speedIndex[h]
+                            minload = maxload
                 
                 if h_star == -1:
                     minload = float("inf")

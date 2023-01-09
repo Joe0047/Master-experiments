@@ -517,7 +517,7 @@ plt.figure(figsize=(15,10),dpi=100,linewidth = 2)
 
 x = np.arange(len(instanceOfCoflows))
 
-width = 0.3
+width = 0.2
 
 plt.bar(x,FLS,width,color = 'r', label="FLS")
 
